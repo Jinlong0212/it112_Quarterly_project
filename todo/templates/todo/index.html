@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>To-Do List</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="container">
+
+        <h1>My To-Do List</h1>
+
+        <form method="POST" action="/add/">
+            {% csrf_token %}
+            <input type="text" name="title" placeholder="Enter a task">
+            <button type="submit">Add</button>
+        </form>
+
+        <ul>
+            {% for task in tasks %}
+                <li>
+                    <span class="task-text {% if task.completed %}completed{% endif %}">
+                        {{ task.title }}
+                    </span>
+
+                    <div class="action-buttons">
+                        {% if not task.completed %}
+                            <a href="/complete/{{ task.id }}/" class="complete-btn">
+                                ✔ Complete
+                            </a>
+                        {% endif %}
+
+                        <a href="/delete/{{ task.id }}/" class="delete-btn">
+                            ✖ Delete
+                        </a>
+                    </div>
+                </li>
+            {% empty %}
+                <li>No tasks yet!</li>
+            {% endfor %}
+        </ul>
+
+    </div>
+</body>
+</html>
